@@ -1,7 +1,8 @@
 from flask import Flask
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_mongoengine import MongoEngine
 from mongoengine import StringField, Document, EmailField, DateTimeField
+from pkg_resources import require
 
 app = Flask(__name__)
 
@@ -16,10 +17,17 @@ app.config["MONGODB_SETTINGS"] = {
 api = Api(app)
 db = MongoEngine(app)
 
+_user_parser = reqparse.RequestParser()
+_user_parser.add_argument('cpf', type=str, required=True, help="This field cannot be blank")
+_user_parser.add_argument('first_name', type=str, required=True, help="This field cannot be blank")
+_user_parser.add_argument('last_name', type=str, required=True, help="This field cannot be blank")
+_user_parser.add_argument('email', type=str, required=True, help="This field cannot be blank")
+_user_parser.add_argument('birth_date', type=str, required=True, help="This field cannot be blank")
+
 
 class UserModel(Document):
     cpf = StringField(required=True, unique=True)
-    fisrt_name = StringField(required=True)
+    first_name = StringField(required=True)
     last_name = StringField(required=True)
     email = EmailField(required=True)
     birth_date = DateTimeField(required=True)
@@ -35,7 +43,9 @@ class User(Resource):
         return {"message": "CPF"}
 
     def post(self):
-        return {"message": "teste"}
+        data = _user_parser.parse_args()
+        UserModel(**data).save()
+        return data
 
 
 api.add_resource(Users, '/users')
