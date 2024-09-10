@@ -4,8 +4,6 @@ from flask_mongoengine import MongoEngine
 from mongoengine import StringField, Document, EmailField, DateTimeField
 
 app = Flask(__name__)
-api = Api(app)
-db = MongoEngine(app)
 
 app.config["MONGODB_SETTINGS"] = {
     "db": "users",
@@ -14,6 +12,9 @@ app.config["MONGODB_SETTINGS"] = {
     "username": "admin",
     "password": "admin"
 }
+
+api = Api(app)
+db = MongoEngine(app)
 
 
 class UserModel(Document):
