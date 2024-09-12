@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_mongoengine import MongoEngine
 from flask_restful import Resource, Api, reqparse
 from mongoengine import StringField, Document, EmailField, DateTimeField, NotUniqueError
@@ -41,7 +41,7 @@ class UserModel(Document):
 
 class Users(Resource):
     def get(self):
-        return {"user": 1}
+        return jsonify(UserModel.objects())
 
 
 class User(Resource):
@@ -76,7 +76,11 @@ class User(Resource):
         return True
 
     def get(self, cpf):
-        return {"message": "CPF"}
+        response = UserModel.objects(cpf=cpf)
+        if response:
+            return jsonify(response)
+        else:
+            return {"message": "User does not exist in Database"}, 404
 
     def post(self):
         data = _user_parser.parse_args()
