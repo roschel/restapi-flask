@@ -2,7 +2,7 @@ import os
 import mongomock
 
 
-class Config:
+class DevConfig:
     MONGODB_SETTINGS = {
         "db": os.getenv("MONGODB_DB"),
         "host": os.getenv("MONGODB_HOST"),
@@ -11,11 +11,13 @@ class Config:
     }
 
 
-class DevConfig(Config):
-    pass
+class ProdConfig:
+    MONGODB_SETTINGS = {
+        "host": os.getenv("MONGODB_HOST"),
+    }
 
 
-class MockConfig(Config):
+class MockConfig:
     MONGODB_SETTINGS = {
         "db": "test",
         "host": "mongodb://localhost",

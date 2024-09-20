@@ -9,3 +9,6 @@ test:
 compose:
 	@docker compose build
 	@docker compose up
+
+compose-down:
+	@docker compose down
