@@ -54,3 +54,4 @@ class TestApplication:
     def test_get_user_does_not_exists(self, client, invalid_user):
         response = client.get(f"/user/{invalid_user['cpf']}")
         assert response.status_code == 404
+        assert b'does not exist' in response.data
