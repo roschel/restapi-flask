@@ -50,3 +50,7 @@ class TestApplication:
         response = client.get(f"/user/{valid_user['cpf']}")
         assert response.status_code == 200
         assert response.json[0]["first_name"] == valid_user["first_name"]
+
+    def test_get_user_does_not_exists(self, client, invalid_user):
+        response = client.get(f"/user/{invalid_user['cpf']}")
+        assert response.status_code == 404
