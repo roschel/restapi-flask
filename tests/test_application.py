@@ -1,6 +1,9 @@
 from copy import deepcopy
+from http.client import responses
 
 import pytest
+from pymongo.common import validate_list
+
 from application import create_app
 
 
@@ -42,3 +45,8 @@ class TestApplication:
         response = client.post("/user", json=invalid_user)
         assert response.status_code == 400
         assert b'invalid' in response.data
+
+    def test_get_user(self, client, valid_user):
+        response = client.get(f"/user/{valid_user['cpf']}")
+        assert response.status_code == 200
+        assert response.json[0]["first_name"] == valid_user["first_name"]
