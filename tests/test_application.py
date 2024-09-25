@@ -1,8 +1,6 @@
 from copy import deepcopy
-from http.client import responses
 
 import pytest
-from pymongo.common import validate_list
 
 from application import create_app
 
